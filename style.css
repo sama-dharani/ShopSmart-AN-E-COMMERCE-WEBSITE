@@ -1,0 +1,59 @@
+
+/* style.css */
+.hidden { display: none; }
+.product-card { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center; transition: transform 0.2s ease; }
+.product-card:hover { transform: scale(1.05); box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); }
+.product-card img { max-width: 100px; margin-bottom: 1rem; }
+.category-card { cursor: pointer; transition: transform 0.2s ease; }
+.category-card:hover { transform: scale(1.05); box-shadow: 0 0 12px rgba(0,0,0,0.2); }
+nav a { margin-right: 1rem; }
+
+/* style.js */
+function login() {
+  window.location.href = 'clothes.html';
+}
+function register() {
+  alert('Registered and verified with OTP!');
+}
+function resetPassword() {
+  alert('Reset link sent to your email');
+}
+function addToCart(index) {
+  const item = products[index];
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  cart.push(item);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  alert('Item added to cart!');
+}
+function placeOrder() {
+  localStorage.removeItem('cart');
+  alert('Order placed successfully!');
+  window.location.href = 'index.html';
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const cartPage = document.getElementById('cartItems');
+  if (cartPage) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let total = 0;
+    cart.forEach((item) => {
+      cartPage.innerHTML += `<p>${item.name} - ₹${item.price}</p>`;
+      total += item.price;
+    });
+    document.getElementById('totalPrice').innerText = `Total: ₹${total}`;
+  }
+  const catDiv = document.getElementById('categories');
+  if (catDiv && typeof products !== 'undefined') {
+    products.forEach((item, i) => {
+      catDiv.innerHTML += `
+        <div class="col-md-4 mb-3">
+          <div class="product-card">
+            <img src="${item.img}" />
+            <p><strong>${item.name}</strong></p>
+            <p>₹${item.price}</p>
+            <button class="btn btn-outline-primary" onclick="addToCart(${i})">Add to Cart</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+});
